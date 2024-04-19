@@ -36,7 +36,7 @@ app.get("/books", async (req, res) => {
    });
 });
 
-app.get("/book/:id", async (req,res) => {
+app.get("/books/:id", async (req,res) => {
     const idBook = req.params.id;
     const connection = await getDBConnection();
     const querySQL = "SELECT * FROM books WHERE id = ?";
@@ -71,5 +71,25 @@ app.post("/books", async (req,res) => {
     res.status(201).json({
         success: true,
         id: result.insertId,
+    });
+});
+
+app.put("/books/:id", async (req, res) => {
+    const idBook = req.params.id;
+    const newData = req.body;
+    const { title, author, publication_date, isbn, description } = newData;
+    const connection = await getDBConnection();
+    const query = "UPDATE books SET title = ?, author = ?, publication_date = ?, isbn = ?, description = ? WHERE id = ?";
+    const [result] = await connection.query(query, [
+        title,
+        author,
+        publication_date,
+        isbn,
+        description,
+        idBook,
+    ]);
+
+    res.status(200).json({
+        success: true, 
     });
 });
