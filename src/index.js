@@ -93,3 +93,21 @@ app.put("/books/:id", async (req, res) => {
         success: true, 
     });
 });
+
+app.delete("/books/:id", async (req, res) => {
+    const idBook = req.params.id;
+    const connection = await getDBConnection();
+    const sqlQuery = "DELETE FROM books WHERE id = ?";
+    const [result] = await connection.query(sqlQuery, [idBook]);
+  if(result.affectedRows > 0){
+    res.status(200).json({
+        success: true,
+        message: "The element has been deleted",
+    });
+  } else {
+    res.status(400).json({
+        success: false,
+        message: "The element has not been deleted",
+    });
+  }
+});
