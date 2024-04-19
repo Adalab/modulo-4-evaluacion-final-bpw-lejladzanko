@@ -35,3 +35,41 @@ app.get("/books", async (req, res) => {
     results: result
    });
 });
+
+app.get("/book/:id", async (req,res) => {
+    const idBook = req.params.id;
+    const connection = await getDBConnection();
+    const querySQL = "SELECT * FROM books WHERE id = ?";
+    const [result] = await connection.query(querySQL, [idBook]);
+    connection.end();
+    if(result.length===0){
+        res.json(404).json({
+            error: "No elements found",
+        });
+    } else {
+        res.status(200).json({
+            success: true,
+            result: result,
+        });
+    }
+});
+
+app.post("/books", async (req,res) => {
+    const data = req.body;
+    const { title, author, publication_date, isbn, description } = data;
+
+    const connection = await getDBConnection();
+    const querySQL = "INSERT INTO books (title, author, publication_date, isbn, description) VALUES (?, ?, ?, ?, ?)";
+    const [result] = await connection.query(querySQL, [
+        title,
+        author,
+        publication_date,
+        isbn,
+        description
+    ]);
+    console.log(result);
+    res.status(201).json({
+        success: true,
+        id: result.insertId,
+    });
+});
