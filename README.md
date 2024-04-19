@@ -59,8 +59,6 @@ DELETE /books/:id - Deletes a book.
 - MySQL - The database used.
 - Swagger UI Express - API documentation.
 
-### Author
-Lejla Dzanko 
 
 
 
