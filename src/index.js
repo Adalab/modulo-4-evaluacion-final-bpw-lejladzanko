@@ -11,7 +11,7 @@ app.use(express.json());
 
 async function getDBConnection(){
     const connection = await mysql.createConnection({
-        host: process.env.HOST,
+        host: "localhost",
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: "library_database"
