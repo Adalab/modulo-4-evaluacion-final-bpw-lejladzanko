@@ -14,7 +14,7 @@ async function getDBConnection(){
         host: "localhost",
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: "library_database"
+        database: "library_db"
     });
     connection.connect();
     return connection;
@@ -23,4 +23,15 @@ async function getDBConnection(){
 const port = process.env.PORT || 5001;
 app.listen(port, () => {
     console.log(`Server is listening at port: ${port}`);
+});
+
+app.get("/books", async (req, res) => {
+    const connection = await getDBConnection();
+    const querySQL = "SELECT * FROM books";
+    const [result] = await connection.query(querySQL);
+   connection.end();
+   res.json({
+    info: { count: result.length},
+    results: result
+   });
 });
